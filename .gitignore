@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Ignore all files in input and output folders
+input/*
+!input/add your txt files here
+output/*

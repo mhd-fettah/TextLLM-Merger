@@ -1,0 +1,57 @@
+import base64
+import logging
+import requests
+import os
+from data.prompt import get_prompt
+from data.config import LLM_API_URL
+
+def send_to_lm_studio(text_path):
+    """Send text data to LM Studio API and return the response."""
+    try:
+        # Read text content
+        with open(text_path, 'r', encoding='utf-8') as text_file:
+            text_content = text_file.read().strip()
+        
+        prompt = get_prompt()
+        
+        # Log the text content for debugging
+        logging.debug(f"Processing text file: {text_path.name}")
+        
+        # Get model name from environment variable or use default
+        model_name = os.environ.get("LLM_MODEL_NAME")
+        
+        # Modify payload to use text-only format
+        payload = {
+            "model": model_name,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": prompt + "\n\n" + text_content
+                }
+            ],
+            "temperature": 0.7
+        }
+        
+        # Log the payload for debugging
+        logging.debug(f"Sending payload: {payload}")
+        
+        # Add a timeout parameter to avoid hanging indefinitely
+        response = requests.post(LLM_API_URL, json=payload, timeout=30)
+        response.raise_for_status()
+        json_response = response.json()
+        
+        # Log the response for debugging
+        logging.debug(f"Response status: {response.status_code}")
+        
+        # Validate the expected response structure
+        choices = json_response.get('choices')
+        if choices and isinstance(choices, list) and len(choices) > 0:
+            return choices[0].get('message', {}).get('content')
+        else:
+            error_msg = f"Unexpected response format: {json_response}"
+            logging.error(error_msg)
+            return None
+    except Exception as e:
+        logging.exception(f"Error processing {text_path.name}")
+        print(f"Error processing {text_path.name}: {str(e)}")
+        return None
