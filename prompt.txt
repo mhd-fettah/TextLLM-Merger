@@ -1,19 +1,48 @@
-You are helping me build a concise and structured technical requirements document for a Laravel-based system.
+You will be given two structured technical documents. Your task is to **merge them intelligently** into a single unified format while preserving **all data**.
 
-Below are two partial documents extracted from UI analyses. Your task is to merge them into one unified document, ensuring that:
-- There are no duplicate entries.
-- Conflicting or varied naming (e.g., "firstName" vs "first_name") is reconciled.
-- The output is well-organized and uses a consistent bullet-point format under standard section headers.
+---
 
-Please use the following structure for the merged document:
-1. Controller(s)
-   - (e.g., Controller name and list of methods)
-2. Database
-   - Table(s) and their Fields (include data types if specified)
-3. View(s)
-   - Blade file name and key components
-4. Other Notes
-   - Any form behavior details, validations, or additional information
+**Important rules to follow:**
 
-Assume these documents refer to the same screen or related system areas unless otherwise noted.
+- Do **not lose** any information. Every field, note, and behavior from both documents must be present in the final output.
+- Use a **clear and clean format** like the example below.
+- If there are **overlapping sections**, combine them while keeping unique fields or data from both.
+- Maintain a **sectioned format**:
+  - Controller
+  - Database
+  - View
+  - Other Notes
+- For duplicate keys or concepts (like "Form behavior"), **combine all relevant details**, do not discard or override.
 
+---
+
+**Format Example for Merged Output:**
+
+```
+Controller:
+- ControllerName1: methodA, methodB
+- ControllerName2: methodC
+
+Database:
+- table name: TableName
+- Fields (column names + types):
+  - id (int)
+  - fieldOne (string)
+  - fieldTwo (varchar)
+
+View:
+- Blade file: filename.blade.php
+- Key components:
+  - Section A
+  - Section B
+
+Other Notes:
+- Form behavior:
+  - [Include ALL behavior notes from both documents]
+```
+
+---
+
+Now, merge the following two documents without losing any data or formatting.
+
+-------

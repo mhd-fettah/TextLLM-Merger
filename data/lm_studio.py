@@ -5,6 +5,10 @@ import os
 from data.prompt import get_prompt
 from data.config import LLM_API_URL
 
+def write_debug_log(msg, content):
+    with open('debug.log', 'a', encoding='utf-8') as log_file:
+        log_file.write(f"msg: {msg}\n\n{content}\n===================\n")
+
 def send_to_lm_studio(text_path, text_path2=None):
     """Send text data to LM Studio API and return the response.
     
@@ -45,6 +49,8 @@ def send_to_lm_studio(text_path, text_path2=None):
         
         # Add the final instruction
         content += "\n\n---\n\nPlease return only the merged result using the structure provided."
+        # Log the final content to file
+        # write_debug_log("input", content)
         
         # Modify payload to use text-only format
         payload = {
@@ -58,7 +64,6 @@ def send_to_lm_studio(text_path, text_path2=None):
             "temperature": 0.7
         }
         
-        # Log the payload for debugging
         logging.debug(f"Sending payload: {payload}")
         
         # Add a timeout parameter to avoid hanging indefinitely
@@ -72,7 +77,9 @@ def send_to_lm_studio(text_path, text_path2=None):
         # Validate the expected response structure
         choices = json_response.get('choices')
         if choices and isinstance(choices, list) and len(choices) > 0:
-            return choices[0].get('message', {}).get('content')
+            result = choices[0].get('message', {}).get('content')
+            # write_debug_log("output", result)
+            return result
         else:
             error_msg = f"Unexpected response format: {json_response}"
             logging.error(error_msg)
