@@ -16,7 +16,7 @@ from data.batch_manager import setup_batch_folders
 from data.lm_studio import send_to_lm_studio
 from data.display_manager import init_progress, update_description, write_message, print_summary
 
-def process_images():
+def process_data():
     """Main function to process all text files in the input directory."""
     try:
         # Load settings and set up batch folders
@@ -46,13 +46,17 @@ def process_images():
 
         # Initialize the progress bar using our display manager module.
         pbar = init_progress(total_files)
+        
+        # Track the last output file path for chaining
+        last_output_file = None
 
         # Process each text file
         for text_path in text_files:
             update_description(pbar, text_path.name)
             iteration_start = time.time()
 
-            response = send_to_lm_studio(text_path)  # Assuming this function can handle text files
+            # Pass the last output file as the second parameter if available
+            response = send_to_lm_studio(text_path, last_output_file)  # Pass second parameter if available
             if response:
                 try:
                     # Save the API response to a file with UTF-8 encoding to handle special characters
@@ -60,6 +64,10 @@ def process_images():
                     with open(output_file, 'w', encoding='utf-8') as f:
                         f.write(response)
                     write_message(pbar, f"[+] Saved response for {text_path.name}")
+                    
+                    # Update the last output file path for the next iteration
+                    last_output_file = output_file
+                    write_message(pbar, f"[+] Set {output_file.name} as input for next file")
 
                     # Move text file after successful processing.
                     new_text_path = batch_input / text_path.name
@@ -103,4 +111,4 @@ def process_images():
         print(error_msg)
 
 if __name__ == "__main__":
-    process_images()
+    process_data()

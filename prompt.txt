@@ -1,1 +1,19 @@
-translate to arabic
+You are helping me build a concise and structured technical requirements document for a Laravel-based system.
+
+Below are two partial documents extracted from UI analyses. Your task is to merge them into one unified document, ensuring that:
+- There are no duplicate entries.
+- Conflicting or varied naming (e.g., "firstName" vs "first_name") is reconciled.
+- The output is well-organized and uses a consistent bullet-point format under standard section headers.
+
+Please use the following structure for the merged document:
+1. Controller(s)
+   - (e.g., Controller name and list of methods)
+2. Database
+   - Table(s) and their Fields (include data types if specified)
+3. View(s)
+   - Blade file name and key components
+4. Other Notes
+   - Any form behavior details, validations, or additional information
+
+Assume these documents refer to the same screen or related system areas unless otherwise noted.
+
